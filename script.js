@@ -1,27 +1,5 @@
-// Categories and respective tags (.png or .gif)
-const galleryData = [
-    { src: "assets/drawings/space_2.png", category: "drawings", tags: ["pixel-art", "space"] },
-    { src: "assets/drawings/space_3.png", category: "drawings", tags: ["pixel-art", "64x64", "space"] },
-    { src: "assets/drawings/space_4.png", category: "drawings", tags: ["pixel-art", "64x64", "space"] },
-    { src: "assets/drawings/space_7.png", category: "drawings", tags: ["pixel-art", "64x64", "space"] },
-    { src: "assets/drawings/space_8.png", category: "drawings", tags: ["pixel-art", "64x64", "space"] },
-
-    { src: "assets/drawings/abcd.png", category: "drawings", tags: ["pixel-art"] },
-
-    { src: "assets/logos/logo_crafting_recipe_exporter.png", category: "logos", tags: ["digital"] },
-    { src: "assets/logos/logo_create_encased.png", category: "logos", tags: ["digital"] },
-    { src: "assets/logos/logo_create_encased_alt.png", category: "logos", tags: ["digital"] },
-    { src: "assets/logos/logo_create_more_recipes.png", category: "logos", tags: ["digital"] },
-    { src: "assets/logos/logo_create_more_recipes_alt.png", category: "logos", tags: ["digital"] },
-    { src: "assets/logos/logo_create_qol.png", category: "logos", tags: ["digital"] },
-    { src: "assets/logos/logo_create_qol_alt.png", category: "logos", tags: ["digital"] },
-    { src: "assets/logos/logo_structures_tweaker.png", category: "logos", tags: ["digital"] },
-
-    { src: "assets/minecraft/chicken_skin.png", category: "minecraft", tags: ["16x16"] },
-    { src: "assets/minecraft/compacted_chicken.png", category: "minecraft", tags: ["16x16"] },
-    { src: "assets/minecraft/totem_of_chickening.png", category: "minecraft", tags: ["16x16"] },
-];
-
+//VIBECODED
+let galleryData = [];
 let currentCategory = "all";
 let activeTags = [];
 let currentPage = 1;
@@ -30,9 +8,8 @@ let currentFilteredItems = [];
 let currentLightboxIndex = 0;
 let randomShuffledItems = [];
 
-// DOM Elements
 const grid = document.getElementById("gallery-grid");
-const tabButtons = document.querySelectorAll(".tab-btn");
+const tabButtons = document.querySelectorAll(".tab-btn[data-category]");
 const tagCheckboxes = document.querySelectorAll(".tag-filter");
 const sidebar = document.getElementById("filters-sidebar");
 const sidebarToggle = document.getElementById("sidebar-toggle");
@@ -41,26 +18,50 @@ const themeToggle = document.getElementById("theme-toggle");
 const settingsToggle = document.getElementById("settings-toggle");
 const settingsModal = document.getElementById("settings-modal");
 const settingsSave = document.getElementById("settings-save");
-const tabsNav = document.querySelector(".tabs-nav");
+const clearFiltersBtn = document.getElementById("clear-filters");
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
+const lightboxCaption = document.getElementById("lightbox-caption");
 const lightboxClose = document.getElementById("lightbox-close");
 const lightboxPrev = document.getElementById("lightbox-prev");
 const lightboxNext = document.getElementById("lightbox-next");
+const shuffleBtn = document.getElementById("shuffle-btn");
 
-const shuffleBtn = document.createElement("button");
-shuffleBtn.className = "tab-btn";
-shuffleBtn.id = "shuffle-btn";
-shuffleBtn.textContent = "Shuffle 🔀";
-shuffleBtn.style.display = "none";
-tabsNav.appendChild(shuffleBtn);
+function parseNestedJson(node, currentPath = "assets") {
+    for (const [key, value] of Object.entries(node)) {
+        if (Array.isArray(value)) {
+            const filePath = `${currentPath}/${key}`;
+            const pathParts = currentPath.split("/");
+            const category = pathParts.length > 1 ? pathParts[1] : "general";
+            
+            galleryData.push({
+                src: filePath,
+                filename: key,
+                category: category,
+                tags: value
+            });
+        } else if (typeof value === "object" && value !== null) {
+            parseNestedJson(value, `${currentPath}/${key}`);
+        }
+    }
+}
 
-// Initialization
-function initGallery() {
-    setupEventListeners();
-    generateRandomShuffle();
-    filterAndRender();
+async function initGallery() {
+    try {
+        const response = await fetch("gallery.json");
+        const jsonData = await response.json();
+        
+        galleryData = [];
+        parseNestedJson(jsonData, "assets");
+
+        setupEventListeners();
+        generateRandomShuffle();
+        filterAndRender();
+    } catch (error) {
+        console.error("Error loading gallery.json:", error);
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:red;">Error: Cannot load gallery.json</p>`;
+    }
 }
 
 function shuffleArray(array) {
@@ -76,19 +77,17 @@ function generateRandomShuffle() {
     randomShuffledItems = shuffleArray(galleryData);
 }
 
-// Filtering and Sorting
 function filterAndRender() {
     if (currentCategory === "random") {
-        // Random mode
         currentFilteredItems = randomShuffledItems.filter(item => {
             if (activeTags.length > 0) {
                 return activeTags.every(tag => item.tags.includes(tag));
             }
             return true;
         });
-        shuffleBtn.style.display = "inline-block"; // Display the shuffle button
+        shuffleBtn.style.display = "inline-block";
     } else {
-        shuffleBtn.style.display = "none"; // Hides the shuffle button when not using random
+        shuffleBtn.style.display = "none";
         currentFilteredItems = galleryData.filter(item => {
             let matchesCategory = (currentCategory === "all" || item.category === currentCategory);
             let matchesTags = true;
@@ -99,7 +98,6 @@ function filterAndRender() {
         });
     }
 
-    // Pagination management
     const totalPages = Math.ceil(currentFilteredItems.length / itemsPerPage) || 1;
     if (currentPage > totalPages) currentPage = totalPages;
 
@@ -114,7 +112,7 @@ function renderGrid() {
     const pageItems = currentFilteredItems.slice(start, end);
 
     if (pageItems.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 2rem;">Aucune image trouvée.</p>`;
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding: 2rem;">No image found</p>`;
         return;
     }
 
@@ -122,7 +120,7 @@ function renderGrid() {
         const absoluteIndex = start + index;
         const div = document.createElement("div");
         div.className = "mosaic-item";
-        div.innerHTML = `<img src="${item.src}" alt="Artwork" loading="lazy">`;
+        div.innerHTML = `<img src="${item.src}" alt="${item.filename}" loading="lazy">`;
         div.addEventListener("click", () => openLightbox(absoluteIndex));
         grid.appendChild(div);
     });
@@ -141,9 +139,7 @@ function updatePaginationUI(totalPages) {
     document.querySelectorAll(".next-page").forEach(btn => btn.disabled = nextDisabled);
 }
 
-// Event Listeners
 function setupEventListeners() {
-    // Tab switching
     tabButtons.forEach(btn => {
         btn.addEventListener("click", (e) => {
             tabButtons.forEach(b => b.classList.remove("active"));
@@ -155,17 +151,17 @@ function setupEventListeners() {
         });
     });
 
-    // Clic sur le bouton Shuffle
     shuffleBtn.addEventListener("click", () => {
         tabButtons.forEach(b => b.classList.remove("active"));
-        shuffleBtn.classList.add("active");
+        document.querySelector('.tab-btn[data-category="random"]').classList.add("active");
+        shuffleBtn.classList.remove("active"); // Removes active state so shuffle doesn't stay highlighted
+
         currentCategory = "random";
-        generateRandomShuffle(); // Remélange les images
+        generateRandomShuffle();
         currentPage = 1;
         filterAndRender();
     });
 
-    // Sidebar filters (Tags)
     tagCheckboxes.forEach(cb => {
         cb.addEventListener("change", () => {
             activeTags = Array.from(tagCheckboxes)
@@ -176,11 +172,16 @@ function setupEventListeners() {
         });
     });
 
-    // Open/Close Sidebar
+    clearFiltersBtn.addEventListener("click", () => {
+        tagCheckboxes.forEach(cb => cb.checked = false);
+        activeTags = [];
+        currentPage = 1;
+        filterAndRender();
+    });
+
     sidebarToggle.addEventListener("click", () => sidebar.classList.add("open"));
     sidebarClose.addEventListener("click", () => sidebar.classList.remove("open"));
 
-    // Pagination buttons
     document.querySelectorAll(".prev-page").forEach(btn => {
         btn.addEventListener("click", () => {
             if (currentPage > 1) {
@@ -204,13 +205,11 @@ function setupEventListeners() {
         });
     });
 
-    // Quick Dark / Light mode toggle
     themeToggle.addEventListener("click", () => {
         const html = document.documentElement;
         html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
     });
 
-    // Settings Modal
     settingsToggle.addEventListener("click", () => settingsModal.classList.add("active"));
     settingsModal.addEventListener("click", (e) => {
         if (e.target === settingsModal) settingsModal.classList.remove("active");
@@ -229,7 +228,6 @@ function setupEventListeners() {
         filterAndRender();
     });
 
-    // Lightbox (Large format viewer)
     lightboxClose.addEventListener("click", closeLightbox);
     lightbox.addEventListener("click", (e) => {
         if (e.target === lightbox) closeLightbox();
@@ -247,7 +245,6 @@ function setupEventListeners() {
         updateLightboxImage();
     });
 
-    // Keyboard navigation (Left/Right arrows and Escape)
     document.addEventListener("keydown", (e) => {
         if (!lightbox.classList.contains("active")) return;
         if (e.key === "Escape") closeLightbox();
@@ -270,8 +267,9 @@ function updateLightboxImage() {
     const item = currentFilteredItems[currentLightboxIndex];
     if (item) {
         lightboxImg.src = item.src;
+        lightboxCaption.textContent = item.filename;
         lightboxImg.className = "";
-
+        
         const tempImg = new Image();
         tempImg.src = item.src;
         tempImg.onload = () => {
@@ -290,5 +288,4 @@ function updateLightboxImage() {
     }
 }
 
-// Launch on page load
 window.addEventListener("DOMContentLoaded", initGallery);

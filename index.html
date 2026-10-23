@@ -1,3 +1,4 @@
+<!-- VIBECODED -->
 <!DOCTYPE html>
 <html lang="fr" data-theme="dark">
 <head>
@@ -9,17 +10,19 @@
 </head>
 <body>
 
-    <!-- Header: Tabs + Controls (Theme & Settings) -->
     <header class="main-header">
         <button id="sidebar-toggle" class="btn-icon" title="Open filters">☰ Filters</button>
         
-        <nav class="tabs-nav">
-            <button class="tab-btn active" data-category="all">All</button>
-            <button class="tab-btn" data-category="drawings">Drawings</button>
-            <button class="tab-btn" data-category="logos">Logos</button>
-            <button class="tab-btn" data-category="minecraft">Minecraft</button>
-            <button class="tab-btn" data-category="random">Random</button>
-        </nav>
+        <div class="nav-container">
+            <nav class="tabs-nav">
+                <button class="tab-btn active" data-category="all">All</button>
+                <button class="tab-btn" data-category="drawings">Drawings</button>
+                <button class="tab-btn" data-category="logos">Logos</button>
+                <button class="tab-btn" data-category="minecraft">Minecraft</button>
+                <button class="tab-btn" data-category="random">Random</button>
+            </nav>
+            <button class="tab-btn" id="shuffle-btn" style="display: none;">Shuffle 🔀</button>
+        </div>
 
         <div class="header-controls">
             <button id="theme-toggle" class="btn-icon" title="Dark/light mode">🌓</button>
@@ -28,7 +31,6 @@
     </header>
 
     <div class="layout-container">
-        <!-- Sidebar filters panel (collapsible) -->
         <aside id="filters-sidebar" class="sidebar">
             <div class="sidebar-header">
                 <h3>Filters</h3>
@@ -50,52 +52,44 @@
                 <label><input type="checkbox" class="tag-filter" value="materials"> Materials</label>
                 <label><input type="checkbox" class="tag-filter" value="space"> Space</label>
             </div>
+            <button id="clear-filters" class="btn-primary" style="width: 100%; margin-top: 1rem;">Clear filters</button>
         </aside>
 
-        <!-- Main content -->
         <main class="content">
-            <!-- Pagination (Top) -->
             <div class="pagination-bar">
                 <button class="page-btn prev-page">← Previous</button>
-                <span class="page-info"> <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+                <span class="page-info"><span id="current-page">1</span> of <span id="total-pages">1</span></span>
                 <button class="page-btn next-page">Next →</button>
             </div>
 
-            <!-- Image mosaic grid -->
-            <div id="gallery-grid" class="mosaic-grid">
-                <!-- Images will be injected dynamically here by the JS script -->
-            </div>
+            <div id="gallery-grid" class="mosaic-grid"></div>
 
-            <!-- Pagination (Bottom) -->
             <div class="pagination-bar">
                 <button class="page-btn prev-page">← Previous</button>
-                <span class="page-info">Page <span id="current-page-bottom">1</span> of <span id="total-pages-bottom">1</span></span>
+                <span class="page-info"><span id="current-page-bottom">1</span> of <span id="total-pages-bottom">1</span></span>
                 <button class="page-btn next-page">Next →</button>
             </div>
         </main>
     </div>
 
-    <!-- Fullscreen viewer (Lightbox) -->
     <div id="lightbox" class="lightbox">
         <button id="lightbox-close" class="lightbox-btn">×</button>
         <button id="lightbox-prev" class="lightbox-btn">‹</button>
-        <img id="lightbox-img" src="" alt="Enlargement">
+        
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Enlargement">
+        </div>
+
+        <div id="lightbox-caption"></div>
+
         <button id="lightbox-next" class="lightbox-btn">›</button>
     </div>
 
-    <!-- Settings Modal -->
     <div id="settings-modal" class="modal">
         <div class="modal-content">
             <h3>Gallery's parameters</h3>
-            <!-- <label>
-                Main color (Background/Text) :
-                <select id="setting-theme-mode">
-                    <option value="monochrome">Monochrome</option>
-                    <option value="dark-slate">Dark slate</option>
-                </select>
-            </label> -->
             <label>
-                Accent color :
+                Accent color : (why not?)
                 <input type="color" id="setting-accent-color" value="#0066ff">
             </label>
             <label>
