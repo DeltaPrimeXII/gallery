@@ -1,0 +1,134 @@
+{
+    "drawings": {
+        "space_2.png": [
+            "pixel-art",
+            "space"
+        ],
+        "space_3.png": [
+            "pixel-art",
+            "64x64",
+            "space"
+        ],
+        "space_4.png": [
+            "pixel-art",
+            "64x64",
+            "space"
+        ],
+        "space_7.png": [
+            "pixel-art",
+            "64x64",
+            "space"
+        ],
+        "space_8.png": [
+            "pixel-art",
+            "64x64",
+            "space"
+        ]
+    },
+    "logos": {
+        "logo_crafting_recipe_exporter.png": [
+            "digital"
+        ],
+        "logo_create_encased.png": [
+            "digital"
+        ],
+        "logo_create_encased_alt.png": [
+            "digital"
+        ],
+        "logo_create_more_recipes.png": [
+            "digital"
+        ],
+        "logo_create_more_recipes_alt.png": [
+            "digital"
+        ],
+        "logo_create_qol.png": [
+            "digital"
+        ],
+        "logo_create_qol_alt.png": [
+            "digital"
+        ],
+        "logo_structures_tweaker.png": [
+            "pixel-art"
+        ]
+    },
+    "minecraft": {
+        "chicken_skin.png": [
+            "16x16"
+        ],
+        "compacted_chicken.png": [
+            "16x16"
+        ],
+        "totem_of_chickening.png": [
+            "16x16"
+        ],
+        "explodium_shard.png": [
+            "16x16"
+        ],
+        "blue_berries.png": [
+            "16x16"
+        ],
+        "irold_berries.png": [
+            "16x16"
+        ],
+        "brewing_stand_thing.png": [
+            "16x16"
+        ],
+        "blue_berry_bush_stage4.png": [
+            "16x16"
+        ],
+        "sturdy_calorite_ingot.png": [
+            "16x16"
+        ],
+        "magma_cream_crossbow.png": [
+            "16x16"
+        ],
+        "explodium_ore.png": [
+            "16x16"
+        ],
+        "brastrum_ingot.png": [
+            "16x16"
+        ],
+        "obsidian_sword.png": [
+            "16x16"
+        ],
+        "melted_cryonite_sword.png": [
+            "16x16"
+        ],
+        "omni_sword.png": [
+            "16x16"
+        ],
+        "cheese_enriched_steel.png": [
+            "16x16"
+        ],
+        "blue_berry_bush_stage2.png": [
+            "16x16"
+        ],
+        "tnt_ball.png": [
+            "16x16"
+        ],
+        "blue_berry_bush_stage0.png": [
+            "16x16"
+        ],
+        "dark_crystal.png": [
+            "16x16"
+        ],
+        "blue_berry_bush_stage3.png": [
+            "16x16"
+        ],
+        "raw_explodium_block.png": [
+            "16x16"
+        ],
+        "andeshite_alloy.png": [
+            "16x16"
+        ],
+        "blue_berry_bush_stage1.png": [
+            "16x16"
+        ],
+        "cheese_too_enriched_steel.png": [
+            "16x16"
+        ],
+        "explodium_shard_alt.png": [
+            "16x16"
+        ]
+    }
+}
