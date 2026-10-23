@@ -235,9 +235,23 @@ body {
     max-width: 90vw;
     max-height: 90vh;
     object-fit: contain;
+    image-rendering: auto; 
+}
+
+.lightbox img.pixelated-upscale {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+    transform-origin: center;
 }
+
+.lightbox img.scale-x2 { transform: scale(2); }
+.lightbox img.scale-x4 { transform: scale(4); }
+.lightbox img.scale-x8 { transform: scale(8); }
+.lightbox img.scale-x16 { transform: scale(16); }
+
+#lightbox-close { top: 20px; right: 20px; }
+#lightbox-prev { left: 20px; top: 50%; transform: translateY(-50%); }
+#lightbox-next { right: 20px; top: 50%; transform: translateY(-50%); }
 
 .lightbox-btn {
     position: absolute;
@@ -252,6 +266,12 @@ body {
 
 .lightbox-btn:hover {
     background: rgba(255, 255, 255, 0.3);
+}
+
+/* Apply upscaling only if activated by the script */
+.lightbox img.pixelated-upscale {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 #lightbox-close { top: 20px; right: 20px; }

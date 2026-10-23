@@ -1,10 +1,25 @@
 // Categories and respective tags (.png or .gif)
 const galleryData = [
     { src: "assets/drawings/space_2.png", category: "drawings", tags: ["pixel-art", "space"] },
-    { src: "assets/drawings/space_3.png", category: "drawings", tags: ["pixel-art", "space"] },
-    { src: "assets/drawings/space_4.png", category: "drawings", tags: ["pixel-art", "space"] },
-    { src: "assets/drawings/space_7.png", category: "drawings", tags: ["pixel-art", "space"] },
-    { src: "assets/drawings/space_8.png", category: "drawings", tags: ["pixel-art", "space"] }
+    { src: "assets/drawings/space_3.png", category: "drawings", tags: ["pixel-art", "64x64", "space"] },
+    { src: "assets/drawings/space_4.png", category: "drawings", tags: ["pixel-art", "64x64", "space"] },
+    { src: "assets/drawings/space_7.png", category: "drawings", tags: ["pixel-art", "64x64", "space"] },
+    { src: "assets/drawings/space_8.png", category: "drawings", tags: ["pixel-art", "64x64", "space"] },
+
+    { src: "assets/drawings/abcd.png", category: "drawings", tags: ["pixel-art"] },
+
+    { src: "assets/logos/logo_crafting_recipe_exporter.png", category: "logos", tags: ["digital"] },
+    { src: "assets/logos/logo_create_encased.png", category: "logos", tags: ["digital"] },
+    { src: "assets/logos/logo_create_encased_alt.png", category: "logos", tags: ["digital"] },
+    { src: "assets/logos/logo_create_more_recipes.png", category: "logos", tags: ["digital"] },
+    { src: "assets/logos/logo_create_more_recipes_alt.png", category: "logos", tags: ["digital"] },
+    { src: "assets/logos/logo_create_qol.png", category: "logos", tags: ["digital"] },
+    { src: "assets/logos/logo_create_qol_alt.png", category: "logos", tags: ["digital"] },
+    { src: "assets/logos/logo_structures_tweaker.png", category: "logos", tags: ["digital"] },
+
+    { src: "assets/minecraft/chicken_skin.png", category: "minecraft", tags: ["16x16"] },
+    { src: "assets/minecraft/compacted_chicken.png", category: "minecraft", tags: ["16x16"] },
+    { src: "assets/minecraft/totem_of_chickening.png", category: "minecraft", tags: ["16x16"] },
 ];
 
 let currentCategory = "all";
@@ -13,6 +28,7 @@ let currentPage = 1;
 let itemsPerPage = 20;
 let currentFilteredItems = [];
 let currentLightboxIndex = 0;
+let randomShuffledItems = [];
 
 // DOM Elements
 const grid = document.getElementById("gallery-grid");
@@ -25,6 +41,7 @@ const themeToggle = document.getElementById("theme-toggle");
 const settingsToggle = document.getElementById("settings-toggle");
 const settingsModal = document.getElementById("settings-modal");
 const settingsSave = document.getElementById("settings-save");
+const tabsNav = document.querySelector(".tabs-nav");
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
@@ -32,32 +49,55 @@ const lightboxClose = document.getElementById("lightbox-close");
 const lightboxPrev = document.getElementById("lightbox-prev");
 const lightboxNext = document.getElementById("lightbox-next");
 
+const shuffleBtn = document.createElement("button");
+shuffleBtn.className = "tab-btn";
+shuffleBtn.id = "shuffle-btn";
+shuffleBtn.textContent = "Shuffle 🔀";
+shuffleBtn.style.display = "none";
+tabsNav.appendChild(shuffleBtn);
+
 // Initialization
 function initGallery() {
     setupEventListeners();
+    generateRandomShuffle();
     filterAndRender();
+}
+
+function shuffleArray(array) {
+    let arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function generateRandomShuffle() {
+    randomShuffledItems = shuffleArray(galleryData);
 }
 
 // Filtering and Sorting
 function filterAndRender() {
-    currentFilteredItems = galleryData.filter(item => {
-        // Filter by tab (except "all" and "random" which are handled differently or show everything)
-        let matchesCategory = true;
-        if (currentCategory !== "all" && currentCategory !== "random") {
-            matchesCategory = (item.category === currentCategory);
-        } else if (currentCategory === "random") {
-            // For random, we can display the random category or mix everything
-            matchesCategory = (item.category === "random");
-        }
-
-        // Filter by checked sidebar tags
-        let matchesTags = true;
-        if (activeTags.length > 0) {
-            matchesTags = activeTags.every(tag => item.tags.includes(tag));
-        }
-
-        return matchesCategory && matchesTags;
-    });
+    if (currentCategory === "random") {
+        // Random mode
+        currentFilteredItems = randomShuffledItems.filter(item => {
+            if (activeTags.length > 0) {
+                return activeTags.every(tag => item.tags.includes(tag));
+            }
+            return true;
+        });
+        shuffleBtn.style.display = "inline-block"; // Display the shuffle button
+    } else {
+        shuffleBtn.style.display = "none"; // Hides the shuffle button when not using random
+        currentFilteredItems = galleryData.filter(item => {
+            let matchesCategory = (currentCategory === "all" || item.category === currentCategory);
+            let matchesTags = true;
+            if (activeTags.length > 0) {
+                matchesTags = activeTags.every(tag => item.tags.includes(tag));
+            }
+            return matchesCategory && matchesTags;
+        });
+    }
 
     // Pagination management
     const totalPages = Math.ceil(currentFilteredItems.length / itemsPerPage) || 1;
@@ -107,11 +147,22 @@ function setupEventListeners() {
     tabButtons.forEach(btn => {
         btn.addEventListener("click", (e) => {
             tabButtons.forEach(b => b.classList.remove("active"));
+            shuffleBtn.classList.remove("active");
             e.target.classList.add("active");
             currentCategory = e.target.dataset.category;
             currentPage = 1;
             filterAndRender();
         });
+    });
+
+    // Clic sur le bouton Shuffle
+    shuffleBtn.addEventListener("click", () => {
+        tabButtons.forEach(b => b.classList.remove("active"));
+        shuffleBtn.classList.add("active");
+        currentCategory = "random";
+        generateRandomShuffle(); // Remélange les images
+        currentPage = 1;
+        filterAndRender();
     });
 
     // Sidebar filters (Tags)
@@ -219,6 +270,23 @@ function updateLightboxImage() {
     const item = currentFilteredItems[currentLightboxIndex];
     if (item) {
         lightboxImg.src = item.src;
+        lightboxImg.className = "";
+
+        const tempImg = new Image();
+        tempImg.src = item.src;
+        tempImg.onload = () => {
+            const maxDim = Math.max(tempImg.naturalWidth, tempImg.naturalHeight);
+            
+            if (maxDim >= 129 && maxDim <= 256) {
+                lightboxImg.classList.add("pixelated-upscale", "scale-x2");
+            } else if (maxDim >= 65 && maxDim <= 128) {
+                lightboxImg.classList.add("pixelated-upscale", "scale-x4");
+            } else if (maxDim >= 32 && maxDim <= 64) {
+                lightboxImg.classList.add("pixelated-upscale", "scale-x8");
+            } else if (maxDim >= 1 && maxDim <= 31) {
+                lightboxImg.classList.add("pixelated-upscale", "scale-x16");
+            }
+        };
     }
 }
 

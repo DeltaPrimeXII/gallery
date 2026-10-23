@@ -11,7 +11,7 @@
 
     <!-- Header: Tabs + Controls (Theme & Settings) -->
     <header class="main-header">
-        <button id="sidebar-toggle" class="btn-icon" title="Ouvrir les filtres">☰ Filtres</button>
+        <button id="sidebar-toggle" class="btn-icon" title="Open filters">☰ Filters</button>
         
         <nav class="tabs-nav">
             <button class="tab-btn active" data-category="all">All</button>
@@ -22,8 +22,8 @@
         </nav>
 
         <div class="header-controls">
-            <button id="theme-toggle" class="btn-icon" title="Mode sombre/clair">🌓</button>
-            <button id="settings-toggle" class="btn-icon" title="Paramètres">⚙️</button>
+            <button id="theme-toggle" class="btn-icon" title="Dark/light mode">🌓</button>
+            <button id="settings-toggle" class="btn-icon" title="Parameters">⚙️</button>
         </div>
     </header>
 
@@ -31,23 +31,24 @@
         <!-- Sidebar filters panel (collapsible) -->
         <aside id="filters-sidebar" class="sidebar">
             <div class="sidebar-header">
-                <h3>Filtres</h3>
+                <h3>Filters</h3>
                 <button id="sidebar-close" class="btn-icon">×</button>
             </div>
             <div class="filter-group">
                 <h4>Style</h4>
                 <label><input type="checkbox" class="tag-filter" value="pixel-art"> Pixel Art</label>
-                <label><input type="checkbox" class="tag-filter" value="vector"> Vectoriel / Clean</label>
+                <label><input type="checkbox" class="tag-filter" value="digital"> Digital</label>
             </div>
             <div class="filter-group">
-                <h4>Résolution / Échelle</h4>
-                <label><input type="checkbox" class="tag-filter" value="scale-16"> 16x16 / 32x32</label>
-                <label><input type="checkbox" class="tag-filter" value="high-res"> Haute résolution</label>
+                <h4>Size</h4>
+                <label><input type="checkbox" class="tag-filter" value="64x64"> 64x64</label>
+                <label><input type="checkbox" class="tag-filter" value="32x32"> 32x32</label>
+                <label><input type="checkbox" class="tag-filter" value="16x16"> 16x16</label>   
             </div>
             <div class="filter-group">
-                <h4>Matière / Ambiance</h4>
-                <label><input type="checkbox" class="tag-filter" value="stone"> Pierre / Minéral</label>
-                <label><input type="checkbox" class="tag-filter" value="nature"> Nature / Végétal</label>
+                <h4>Theme</h4>
+                <label><input type="checkbox" class="tag-filter" value="materials"> Materials</label>
+                <label><input type="checkbox" class="tag-filter" value="space"> Space</label>
             </div>
         </aside>
 
@@ -55,9 +56,9 @@
         <main class="content">
             <!-- Pagination (Top) -->
             <div class="pagination-bar">
-                <button class="page-btn prev-page">← Précédent</button>
-                <span class="page-info">Page <span id="current-page">1</span> sur <span id="total-pages">1</span></span>
-                <button class="page-btn next-page">Suivant →</button>
+                <button class="page-btn prev-page">← Previous</button>
+                <span class="page-info"> <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+                <button class="page-btn next-page">Next →</button>
             </div>
 
             <!-- Image mosaic grid -->
@@ -67,9 +68,9 @@
 
             <!-- Pagination (Bottom) -->
             <div class="pagination-bar">
-                <button class="page-btn prev-page">← Précédent</button>
-                <span class="page-info">Page <span id="current-page-bottom">1</span> sur <span id="total-pages-bottom">1</span></span>
-                <button class="page-btn next-page">Suivant →</button>
+                <button class="page-btn prev-page">← Previous</button>
+                <span class="page-info">Page <span id="current-page-bottom">1</span> of <span id="total-pages-bottom">1</span></span>
+                <button class="page-btn next-page">Next →</button>
             </div>
         </main>
     </div>
@@ -78,30 +79,30 @@
     <div id="lightbox" class="lightbox">
         <button id="lightbox-close" class="lightbox-btn">×</button>
         <button id="lightbox-prev" class="lightbox-btn">‹</button>
-        <img id="lightbox-img" src="" alt="Agrandissement">
+        <img id="lightbox-img" src="" alt="Enlargement">
         <button id="lightbox-next" class="lightbox-btn">›</button>
     </div>
 
     <!-- Settings Modal -->
     <div id="settings-modal" class="modal">
         <div class="modal-content">
-            <h3>Paramètres de la galerie</h3>
-            <label>
-                Couleur principale (Fond/Texte) :
+            <h3>Gallery's parameters</h3>
+            <!-- <label>
+                Main color (Background/Text) :
                 <select id="setting-theme-mode">
-                    <option value="monochrome">Noir & Blanc classique</option>
-                    <option value="dark-slate">Gris nuit & Blanc</option>
+                    <option value="monochrome">Monochrome</option>
+                    <option value="dark-slate">Dark slate</option>
                 </select>
-            </label>
+            </label> -->
             <label>
-                Couleur secondaire (Accent bleu) :
+                Accent color :
                 <input type="color" id="setting-accent-color" value="#0066ff">
             </label>
             <label>
-                Images par page :
-                <input type="number" id="setting-per-page" min="5" max="100" value="20">
+                Images per page :
+                <input type="number" id="setting-per-page" min="1" max="500" value="20">
             </label>
-            <button id="settings-save" class="btn-primary">Appliquer</button>
+            <button id="settings-save" class="btn-primary">Apply</button>
         </div>
     </div>
 
