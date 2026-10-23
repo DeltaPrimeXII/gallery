@@ -1,30 +1,109 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-        h1 {
-            font-size: 4rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
 
-    <h1>Gallery</h1>
+    <!-- Header: Tabs + Controls (Theme & Settings) -->
+    <header class="main-header">
+        <button id="sidebar-toggle" class="btn-icon" title="Ouvrir les filtres">☰ Filtres</button>
+        
+        <nav class="tabs-nav">
+            <button class="tab-btn active" data-category="all">All</button>
+            <button class="tab-btn" data-category="drawings">Drawings</button>
+            <button class="tab-btn" data-category="logos">Logos</button>
+            <button class="tab-btn" data-category="minecraft">Minecraft</button>
+            <button class="tab-btn" data-category="random">Random</button>
+        </nav>
+
+        <div class="header-controls">
+            <button id="theme-toggle" class="btn-icon" title="Mode sombre/clair">🌓</button>
+            <button id="settings-toggle" class="btn-icon" title="Paramètres">⚙️</button>
+        </div>
+    </header>
+
+    <div class="layout-container">
+        <!-- Sidebar filters panel (collapsible) -->
+        <aside id="filters-sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>Filtres</h3>
+                <button id="sidebar-close" class="btn-icon">×</button>
+            </div>
+            <div class="filter-group">
+                <h4>Style</h4>
+                <label><input type="checkbox" class="tag-filter" value="pixel-art"> Pixel Art</label>
+                <label><input type="checkbox" class="tag-filter" value="vector"> Vectoriel / Clean</label>
+            </div>
+            <div class="filter-group">
+                <h4>Résolution / Échelle</h4>
+                <label><input type="checkbox" class="tag-filter" value="scale-16"> 16x16 / 32x32</label>
+                <label><input type="checkbox" class="tag-filter" value="high-res"> Haute résolution</label>
+            </div>
+            <div class="filter-group">
+                <h4>Matière / Ambiance</h4>
+                <label><input type="checkbox" class="tag-filter" value="stone"> Pierre / Minéral</label>
+                <label><input type="checkbox" class="tag-filter" value="nature"> Nature / Végétal</label>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="content">
+            <!-- Pagination (Top) -->
+            <div class="pagination-bar">
+                <button class="page-btn prev-page">← Précédent</button>
+                <span class="page-info">Page <span id="current-page">1</span> sur <span id="total-pages">1</span></span>
+                <button class="page-btn next-page">Suivant →</button>
+            </div>
+
+            <!-- Image mosaic grid -->
+            <div id="gallery-grid" class="mosaic-grid">
+                <!-- Images will be injected dynamically here by the JS script -->
+            </div>
+
+            <!-- Pagination (Bottom) -->
+            <div class="pagination-bar">
+                <button class="page-btn prev-page">← Précédent</button>
+                <span class="page-info">Page <span id="current-page-bottom">1</span> sur <span id="total-pages-bottom">1</span></span>
+                <button class="page-btn next-page">Suivant →</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Fullscreen viewer (Lightbox) -->
+    <div id="lightbox" class="lightbox">
+        <button id="lightbox-close" class="lightbox-btn">×</button>
+        <button id="lightbox-prev" class="lightbox-btn">‹</button>
+        <img id="lightbox-img" src="" alt="Agrandissement">
+        <button id="lightbox-next" class="lightbox-btn">›</button>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h3>Paramètres de la galerie</h3>
+            <label>
+                Couleur principale (Fond/Texte) :
+                <select id="setting-theme-mode">
+                    <option value="monochrome">Noir & Blanc classique</option>
+                    <option value="dark-slate">Gris nuit & Blanc</option>
+                </select>
+            </label>
+            <label>
+                Couleur secondaire (Accent bleu) :
+                <input type="color" id="setting-accent-color" value="#0066ff">
+            </label>
+            <label>
+                Images par page :
+                <input type="number" id="setting-per-page" min="5" max="100" value="20">
+            </label>
+            <button id="settings-save" class="btn-primary">Appliquer</button>
+        </div>
+    </div>
 
 </body>
 </html>
